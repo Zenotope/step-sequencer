@@ -2,7 +2,11 @@ import React from "react";
 import styles from "./Box.module.css";
 import _ from "lodash";
 
-const Box = props => (
+const Box = props => {
+
+  // console.log(props.checked)
+  // console.log(props.row)
+return (
   <div className={styles.root}>
     {_.map(props.checked[props.row], (isBoxChecked, i) => (
       <div
@@ -23,5 +27,6 @@ const Box = props => (
     ))}
   </div>
 );
+      }
 
 export default Box;

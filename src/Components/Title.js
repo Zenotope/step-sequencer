@@ -9,7 +9,7 @@ const Title = props => (
       .join(" ")
       .value()}
   >
-    Step Sequencer
+    Zequencer
   </div>
 );
 

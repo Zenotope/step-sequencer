@@ -13,6 +13,8 @@ import {
   faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
 import StartAudioContext from "startaudiocontext";
+import { Scale } from "@tonaljs/tonal";
+
 
 /**
  TODO
@@ -37,24 +39,51 @@ library.add(faStop);
 library.add(faRecycle);
 library.add(faInfoCircle);
 
+
+// const [key, setKey] = useState("C3")
+// const[mode, setMode] = useState("major")
+// const[octave, setOctave] = useState("3")
+
+let key = "C"
+let mode = "major"
+let octave = "4"
+
+let scale = `${key}${octave} ${mode}`
+const noteSet = Scale.get(scale).notes
+
 export default class App extends React.PureComponent {
   state = {
     checked: [
-      [true, true, false, false, false, false, false],
-      [false, false, true, false, true, false, true]
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
     ], // sequencer pattern array
     isPlaying: false,
-    sequenceLength: 7, // length of sequence pattern
+    sequenceLength: 16, // length of sequence pattern
     tempo: 120,
+    key: "C",
     maxTempo: 300,
-    isActive: [[0, 0, 0, 1, 0, 1, 0], [0, 1, 0, 1, 0, 1, 0]], // used for highlighting suring visualization
+    isActive: [
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1], 
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1], 
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1], 
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1], 
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1], 
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1], 
+      [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1],  
+    ], 
     renderedNotes: [],
     partContainer: [], // store Part object for future removal
-    notes: ["Eb5", "C5"],
+    notes: noteSet,
     timeContainer: [], // tap tempo array
     defaults: {
       tempo: 120,
-      sequenceLength: 8,
+      sequenceLength: 16,
       isPlaying: false,
       elapsedTime: 0,
       numberOfTaps: 0,
@@ -135,13 +164,13 @@ export default class App extends React.PureComponent {
           Tone.Transport.loop = false;
           Tone.Transport.loopEnd = 0;
           // isActive array zeroed out
-          this.setState({ isActive: [[], []] }, () => console.log("stopped"));
+          this.setState({ isActive: [[], [], [], [], [], [], []] }, () => console.log("stopped"));
         } else {
           // configure looping for step sequencer
           Tone.Transport.loop = true;
           Tone.Transport.loopStart = 0;
           Tone.Transport.loopEnd =
-            (this.state.sequenceLength * 30) / this.state.tempo;
+            (this.state.sequenceLength * 15) / this.state.tempo;
           Tone.Transport.start("+0.0");
           console.log("playing");
         }
@@ -155,7 +184,7 @@ export default class App extends React.PureComponent {
         Tone.Transport.stop();
         Tone.Transport.loopStart = 0;
         Tone.Transport.loopEnd =
-          (this.state.sequenceLength * 30) / this.state.tempo;
+          (this.state.sequenceLength * 15) / this.state.tempo;
         Tone.Transport.loop = true;
         Tone.Transport.start("+0.0");
         console.log("playing restarted");
@@ -165,24 +194,24 @@ export default class App extends React.PureComponent {
     }
   };
 
-  onLengthChange = sequenceLength => {
-    // create a new checked array and push simple everyother note pattern
-    const checked = [[], []];
-    for (let i = 0; i < sequenceLength; i++) {
-      checked[0].push(i === 0);
-      checked[1].push(i !== 0 && i % 2 === 0);
-    }
-    this.setState(
-      () => ({
-        sequenceLength,
-        checked
-      }),
-      () => {
-        Tone.Transport.loopEnd = (sequenceLength * 30) / this.state.tempo;
-        this.generateMetronome();
-      }
-    );
-  };
+  // onLengthChange = sequenceLength => {
+  //   // create a new checked array and push simple everyother note pattern
+  //   const checked = [[], [], []];
+  //   for (let i = 0; i < sequenceLength; i++) {
+  //     checked[0].push(i === 0);
+  //     checked[1].push(i !== 0 && i % 2 === 0);
+  //   }
+  //   this.setState(
+  //     () => ({
+  //       sequenceLength,
+  //       checked
+  //     }),
+  //     () => {
+  //       Tone.Transport.loopEnd = (sequenceLength * 30) / this.state.tempo;
+  //       this.generateMetronome();
+  //     }
+  //   );
+  // };
 
   onTempoChange = tempo => {
     this.setState(
@@ -272,15 +301,18 @@ export default class App extends React.PureComponent {
     partContainer.forEach(part => part.removeAll());
 
     // metronome vitals
-    const [note1, note2] = this.state.notes,
+    const [note1, note2, note3, note4, note5, note6, note7] = this.state.notes,
       seqLength = this.state.sequenceLength,
       matrix = this.state.checked,
       velocity = this.state.velocity;
 
+    // const notes = this.state.notes
+
+
     // new renderedNotes array, populate
     const renderedNotes = [];
     for (let i = 0; i < seqLength; i++) {
-      const time = i / 2;
+      const time = i / 4;
       if (matrix[0][i]) {
         renderedNotes.push({
           note: note1,
@@ -288,14 +320,7 @@ export default class App extends React.PureComponent {
           velocity: velocity,
           index: i
         });
-      } else if (!matrix[1][i]) {
-        renderedNotes.push({
-          note: note1,
-          time: `0:${time}`,
-          velocity: 0,
-          index: i
-        });
-      }
+      } 
       if (matrix[1][i]) {
         renderedNotes.push({
           note: note2,
@@ -304,7 +329,62 @@ export default class App extends React.PureComponent {
           index: i
         });
       }
+      if (matrix[2][i]) {
+        renderedNotes.push({
+          note: note3,
+          time: `0:${time}`,
+          velocity: velocity,
+          index: i
+        });
+      }
+      if (matrix[3][i]) {
+        renderedNotes.push({
+          note: note4,
+          time: `0:${time}`,
+          velocity: velocity,
+          index: i
+        });
+      }
+      if (matrix[4][i]) {
+        renderedNotes.push({
+          note: note5,
+          time: `0:${time}`,
+          velocity: velocity,
+          index: i
+        });
+      }
+      if (matrix[5][i]) {
+        renderedNotes.push({
+          note: note6,
+          time: `0:${time}`,
+          velocity: velocity,
+          index: i
+        });
+      }
+      if (matrix[6][i]) {
+        renderedNotes.push({
+          note: note7,
+          time: `0:${time}`,
+          velocity: velocity,
+          index: i
+        });
+      }
+     
+
+      else if (!matrix[1][i]) {
+        renderedNotes.push({
+          note: note1,
+          time: `0:${time}`,
+          velocity: 0,
+          index: i
+        });
+      }
     }
+
+    console.log(scale)
+    console.log(this.state.notes)
+    console.log(renderedNotes);
+    console.log(matrix)
 
     // create new Part, start Part, push Part to container
     const part = new Tone.Part((time, value) => {
@@ -322,13 +402,41 @@ export default class App extends React.PureComponent {
   triggerVisualize = index => {
     // generate array of 0's
     const length = this.state.sequenceLength;
-    const isActive = [_.fill(Array(length), 0), _.fill(Array(length), 0)];
+    const isActive = [
+      _.fill(Array(length), 0),
+      _.fill(Array(length), 0), 
+      _.fill(Array(length), 0),
+      _.fill(Array(length), 0),
+      _.fill(Array(length), 0),
+      _.fill(Array(length), 0),
+      _.fill(Array(length), 0)];
 
     // set particular index as active
     isActive[0][index] = 1;
     isActive[1][index] = 1;
+    isActive[2][index] = 1;
+    isActive[3][index] = 1;
+    isActive[4][index] = 1;
+    isActive[5][index] = 1;
+    isActive[6][index] = 1;
     this.setState({ isActive });
   };
+
+  onKeyFilter = (inputKey) => {
+    this.setState(
+      {
+        key: inputKey
+      },
+      () => {
+        this.generateMetronome();
+        console.log(key);
+      }
+    );
+  };
+
+  // onModeFilter = (inputMode)=> {
+  //   setMode(inputMode)
+  // }
 
   render() {
     return (
@@ -344,6 +452,9 @@ export default class App extends React.PureComponent {
             onTempoChange={this.onTempoChange}
             onReset={this.onReset}
             handleTap={this.handleTap}
+            onKeyFilter={this.onKeyFilter}
+            // onModeFilter={this.onModeFilter}
+            // onSoundChange={this.onSoundChange}
           />
           <StepSequence
             checked={this.state.checked}

@@ -3,7 +3,7 @@ import styles from "./PitchSelect.module.css";
 
 const PitchSelect = props => (
   <div className={styles.root}>
-    <select
+    {/* <select
       name="pitch"
       id="pitch"
       className={styles.select}
@@ -25,7 +25,8 @@ const PitchSelect = props => (
       <option value="A4">A4</option>
       <option value="Ab4">Ab4</option>
       <option value="G4">G4</option>
-    </select>
+    </select> */}
+    <button className={styles.select}>{props.notes[props.row]}</button>
   </div>
 );
 

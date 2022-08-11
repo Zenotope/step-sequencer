@@ -21,7 +21,7 @@
 }
 
 .checked {
-  background: #cbff8b;
+  background: #0ccaff;
 }
 
 .checked:hover {
@@ -31,12 +31,12 @@
   background: #47474f;
 }
 .activechecked {
-  background: #e3ffc1;
+  background: #0ccaff;
 }
 
 @media (min-width: 900px) {
   .box {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
   }
 }

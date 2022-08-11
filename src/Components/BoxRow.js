@@ -3,7 +3,11 @@ import styles from "./BoxRow.module.css";
 import PitchSelect from "./PitchSelect";
 import Box from "./Box";
 
-const BoxRow = props => (
+const BoxRow = props => {
+
+  // console.log(props.checked)
+  // console.log(props.row)
+  return(
   <div className={styles.root}>
     <PitchSelect
       onPitchSelect={props.onPitchSelect}
@@ -17,6 +21,7 @@ const BoxRow = props => (
       onToggle={props.onToggle}
     />
   </div>
-);
+  )
+  };
 
 export default BoxRow;

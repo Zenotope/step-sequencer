@@ -22,6 +22,7 @@ const TimeSignature = props => (
       <option value="9">9</option>
       <option value="10">10</option>
       <option value="11">11</option>
+      <option value="16">16</option>
     </select>
   </div>
 );
