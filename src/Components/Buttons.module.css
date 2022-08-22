@@ -16,4 +16,13 @@
   .root {
     display: grid;
   }
+
+#transport{
+  position: absolute;
+  top: 100%
+}
+
+#controls{
+  position: relative;
+}
 }

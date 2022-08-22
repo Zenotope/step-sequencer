@@ -14,7 +14,7 @@
     "react-scripts": "3.0.1",
     "startaudiocontext": "^1.2.1",
     "tonal": "^2.2.2",
-    "tone": "^13.4.9"
+    "tone": "^13.8.34"
   },
   "scripts": {
     "start": "react-scripts start",
